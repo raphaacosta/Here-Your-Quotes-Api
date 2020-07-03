@@ -26,7 +26,7 @@ class UsersCntroller {
         email,
         password: hash,
       });
-      
+
       return response.json({ username, email });
     } catch(err) { 
       console.log(err); 
@@ -52,40 +52,6 @@ class UsersCntroller {
 
     return response.status(200).send(user);
   }
-
-  async show(request: Request, response: Response) {
-    const { id } = request.params;
-
-    const user = await connection('users').where('id', id).first();
-
-    if(!user) {
-      return response.status(404).send({ error: 'None user found' });
-    }
-
-    return response.status(200).json({ user });
-
-  }
-
-  async destroy(request: Request, response: Response) {
-    const { id } = request.params;
-    // const user_id = request.headers.authorization;
-
-    const user = await connection('users')
-      .where('id', id)
-      .select('username')
-      .select('email')
-      .first();
-
-    // if(user.user_id !== user_id) {
-    //   return response.status(401).send({ error: 'Operation not permited' });
-    // }
-
-    await connection('users').where('id', id).delete();
-
-    return response.status(204).send({ success: 'User deleted successfully' });
-  }
 }
 
 export default UsersCntroller;
-
-/* to the edge of the universe and back. Endure and Survive */
