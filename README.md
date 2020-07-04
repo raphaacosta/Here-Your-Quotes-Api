@@ -1,3 +1,7 @@
+<h1 align="center">
+  Here Your Quotes - API
+</h1>
+
 ## 📌 Technologies
 
   - [Node.js](https://nodejs.org/en/)
@@ -21,20 +25,22 @@
 
 ## 🚀 Getting Started
 
+  Clone this repository:
 ```bash
   $ git clone https://github.com/raphaacosta/Here-Your-Quotes-Api.git
 ```
-  in the root of the project run:
+  Go to the directory and run:
 ```bash
   $ yarn install
   or
   $ npm install
 ```
-  then run:
+
+  To install all dependencies, then run:
 ```bash
   $ npx knex migrate:latest --knexfile knexfile.ts migrate:latest
 ```
-  and finally, run: `$ yarn dev` or `$ npm dev` to run the API.
+  to run the migrations to the databasse, then run: `$ yarn dev` or `$ npm dev` to run the API.
 
   ## 👍 Contribute
 
