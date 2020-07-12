@@ -57,6 +57,35 @@ class QuotesController {
     return response.json({ quote });
   }
 
+  async update(request: Request, response: Response) {
+    const { id } = request.params;
+    const user_id = Number(request.headers.authorization);
+    const { content, author, complement } = request.body;
+
+    const quote: Quote = await connection('quotes').where('id', id).first();
+
+    if(quote.user_id !== user_id){
+      console.log(quote.user_id, user_id);
+      return response.status(401).json({ error: 'Operation not permited' });
+    }
+
+    try{
+      await connection('quotes').where('id', id)
+      .update({
+        content,
+        author,
+        complement,
+      })
+      .select('*');
+
+        return response.json({ content, author, complement });
+    } catch(err) {
+      console.log(err);
+      return response.status(400).send({ error: 'Error updating quote' });
+    }
+    
+  }
+
   async destroy(request: Request, response: Response) {
     const { id } = request.params;
     const user_id = Number(request.headers.authorization);

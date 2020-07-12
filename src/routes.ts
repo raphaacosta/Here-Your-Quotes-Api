@@ -21,5 +21,6 @@ routes.post('/login', usersController.authentication);
 routes.get('/quotes', quotesController.index);
 routes.post('/quotes', quotesController.create);
 routes.delete('/quotes/:id', quotesController.destroy);
+routes.put('/quotes/:id', quotesController.update);
 
 export default routes;
