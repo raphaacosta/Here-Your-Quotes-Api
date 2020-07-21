@@ -35,6 +35,7 @@ routes.post('/users_create', celebrate({
 routes.post('/login', usersController.authentication);
 
 routes.get('/quotes', quotesController.index);
+routes.get('/quotes/:id', quotesController.show);
 routes.post('/quotes', celebrate({
   body: Joi.object().keys({
     content: Joi.string().required(),
@@ -57,9 +58,6 @@ routes.put('/quotes/:id', celebrate({
     content: Joi.string(),
     author: Joi.string(),
     complement: Joi.string(),
-  }),
-  headers: Joi.object().keys({
-    authorization: Joi.number().required(),
   })
 }),quotesController.update);
 
