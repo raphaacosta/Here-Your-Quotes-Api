@@ -51,11 +51,12 @@ class QuotesController {
 
   async show(request: Request, response: Response) {
     const { id } = request.params;
+    const user_id = Number(request.headers.authorization);
 
-    const quote = await connection('quotes').where('id', id).first();
+    const quote = await connection('quotes').where('id', id).where('user_id', user_id).first();
 
     if(!quote) {
-      return response.status(404).send({ error: 'quote not found' });
+      return response.status(404).send({ error: 'Quote not found' });
     }
 
     return response.json({ quote });
@@ -71,7 +72,7 @@ class QuotesController {
     if(quote.user_id !== user_id){
       return response.status(401).json({ error: 'Operation not permited' });
     }
-
+    
     try{
       await connection('quotes').where('id', id)
       .update({
@@ -81,12 +82,11 @@ class QuotesController {
       })
       .select('*');
 
-        return response.json({ content, author, complement });
+        return response.send({ content, author, complement });
     } catch(err) {
       console.log(err);
       return response.status(400).send({ error: 'Error updating quote' });
     }
-    
   }
 
   async destroy(request: Request, response: Response) {
