@@ -47,11 +47,7 @@ routes.post('/quotes', celebrate({
   })
 }),quotesController.create);
 
-routes.delete('/quotes/:id', celebrate({
-  headers: Joi.object().keys({
-    authorization: Joi.number().required(),
-  })
-}),quotesController.destroy);
+routes.delete('/quotes/:id' ,quotesController.destroy);
 
 routes.put('/quotes/:id', celebrate({
   body: Joi.object().keys({
