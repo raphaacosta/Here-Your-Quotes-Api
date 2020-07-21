@@ -12,18 +12,22 @@ interface Quote {
 class QuotesController {
   async index(request: Request, response: Response) {
     const { page = 1 } = request.query;
+    const user_id = String(request.headers.authorization);
     
     const [count] = await connection('quotes').count();
 
-    const quotes = await connection('quotes')
+    const quote = await connection('quotes')
+      .where('user_id', user_id)
       .join('users', 'users.id', '=', 'quotes.user_id')
-      .limit(5)
-      .offset((page as any - 1) * 5)
-      .select(['quotes.*', 'users.username']);
+      .select('quotes.*', 'users.username');
     
+    if(!quote) {
+      return response.send(404).send({ error: 'None quote found' });
+    }
+
     response.header('X-Total-Count', count['count(*)']);
 
-    return response.json({ quotes });
+    return response.json(quote);
   }
 
   async create(request: Request, response: Response) {
@@ -65,7 +69,6 @@ class QuotesController {
     const quote: Quote = await connection('quotes').where('id', id).first();
 
     if(quote.user_id !== user_id){
-      console.log(quote.user_id, user_id);
       return response.status(401).json({ error: 'Operation not permited' });
     }
 
