@@ -41,9 +41,6 @@ routes.post('/quotes', celebrate({
     content: Joi.string().required(),
     author: Joi.string(),
     complement: Joi.string(),
-  }),
-  headers: Joi.object().keys({
-    authorization: Joi.number().required(),
   })
 }),quotesController.create);
 
