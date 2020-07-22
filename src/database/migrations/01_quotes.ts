@@ -5,7 +5,7 @@ export async function up(knex: Knex){
     table.increments('id').primary();
     table.string('content').notNullable();
     table.string('author').notNullable().defaultTo('Unknown');
-    table.string('complement');
+    table.string('complement').notNullable().defaultTo('Unknown');
     table.integer('user_id')
       .notNullable()
       .unsigned()
