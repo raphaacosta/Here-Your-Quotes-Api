@@ -11,10 +11,7 @@ interface Quote {
 
 class QuotesController {
   async index(request: Request, response: Response) {
-    const { page = 1 } = request.query;
     const user_id = String(request.headers.authorization);
-    
-    const [count] = await connection('quotes').count();
 
     const quote = await connection('quotes')
       .where('user_id', user_id)
@@ -24,8 +21,6 @@ class QuotesController {
     if(!quote) {
       return response.send(404).send({ error: 'None quote found' });
     }
-
-    response.header('X-Total-Count', count['count(*)']);
 
     return response.json(quote);
   }
@@ -44,7 +39,6 @@ class QuotesController {
   
       return response.send(quote);
     } catch(err) {
-      console.log(err);
       return response.status(400).send({ error: 'Error creating the quote' });
     };
   }
@@ -52,8 +46,9 @@ class QuotesController {
   async show(request: Request, response: Response) {
     const { id } = request.params;
     const user_id = Number(request.headers.authorization);
+    const trx = await connection.transaction();
 
-    const quote = await connection('quotes').where('id', id).where('user_id', user_id).first();
+    const quote = await trx('quotes').where('id', id).where('user_id', user_id).first();
 
     if(!quote) {
       return response.status(404).send({ error: 'Quote not found' });
@@ -66,15 +61,16 @@ class QuotesController {
     const { id } = request.params;
     const user_id = Number(request.headers.authorization);
     const { content, author, complement } = request.body;
+    const trx = await connection.transaction();
 
-    const quote: Quote = await connection('quotes').where('id', id).first();
+    const quote: Quote = await trx('quotes').where('id', id).first();
 
     if(quote.user_id !== user_id){
       return response.status(401).json({ error: 'Operation not permited' });
     }
     
     try{
-      await connection('quotes').where('id', id)
+      await trx('quotes').where('id', id)
       .update({
         content,
         author,
@@ -93,19 +89,22 @@ class QuotesController {
     const { id } = request.params;
     const user_id = Number(request.headers.authorization);
 
-    const quote: Quote = await connection('quotes')
-    .where('id', id)
-    .select('user_id')
-    .first()
+    const quote = await connection('quotes')
+      .where('id', id)
+      .select('user_id')
+      .first()
 
-    if(quote.user_id !== user_id){
-      console.log(quote.user_id, user_id);
-      return response.status(401).json({ error: 'Operation not permited' });
+    if(user_id !== quote.user_id) {
+      return response.status(401).send({ error:'Operation not permited'});
     }
 
-    await connection('quotes').where('id', id).delete();
-
-    return response.status(204);
+    try{
+      await connection('quotes').where('id', id).delete();
+      
+      return response.status(204).send({ ok: 'deletei pra ti'});
+    } catch(err) {
+      return response.status(400).send({ error: 'Não foi possível deletar a frase' });
+    }
   }
 }
 
