@@ -61,16 +61,15 @@ class QuotesController {
     const { id } = request.params;
     const user_id = Number(request.headers.authorization);
     const { content, author, complement } = request.body;
-    const trx = await connection.transaction();
 
-    const quote: Quote = await trx('quotes').where('id', id).first();
+    const quote: Quote = await connection('quotes').where('id', id).first();
 
     if(quote.user_id !== user_id){
       return response.status(401).json({ error: 'Operation not permited' });
     }
     
     try{
-      await trx('quotes').where('id', id)
+      await connection('quotes').where('id', id)
       .update({
         content,
         author,
@@ -80,7 +79,6 @@ class QuotesController {
 
         return response.send({ content, author, complement });
     } catch(err) {
-      console.log(err);
       return response.status(400).send({ error: 'Error updating quote' });
     }
   }
