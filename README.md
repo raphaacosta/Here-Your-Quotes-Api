@@ -1,9 +1,11 @@
 <h1 align="center">
   Here Your Quotes - API
 </h1>
-<h4 align="center">
-  Mobile App here -> <a source="https://github.com/raphaacosta/Here-Your-Quotes-Mobile">mobile</a>
-</h4>
+<div>
+  <p align="center">
+    <a source="https://github.com/raphaacosta/Here-Your-Quotes-Mobile">mobile</a>
+  </p>
+</div>
 
 ## 📌 Technologies
 
