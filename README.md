@@ -1,11 +1,11 @@
 <h1 align="center">
   Here Your Quotes - API
 </h1>
-<div>
-  <p align="center">
-    <a source="https://github.com/raphaacosta/Here-Your-Quotes-Mobile">mobile</a>
-  </p>
-</div>
+<p align="center">
+  <a href="https://github.com/raphaacosta/Here-Your-Quotes-Mobile">
+    <img alt="Go to mobile" src="https://img.shields.io/badge/Go%20to-mobile-blueviolet"/>
+  </a>
+</p>
 
 ## 📌 Technologies
 
