@@ -4,14 +4,14 @@ module.exports = {
       '@babel/preset-env',
       {
         targets: {
-          node: 'current'
+          node: '12'
         }
       }
     ],
     '@babel/preset-typescript'
   ],
   plugins: [
-    [ 'moduler-resolver', {
+    [ 'module-resolver', {
       alias: {
         '@modelss': './src/models',
         '@controller': './src/controller'
