@@ -13,16 +13,18 @@ class QuotesController {
   async index(request: Request, response: Response) {
     const user_id = String(request.headers.authorization);
 
-    const quote = await connection('quotes')
-      .where('user_id', user_id)
-      .join('users', 'users.id', '=', 'quotes.user_id')
-      .select('quotes.*', 'users.username');
-    
-    if(!quote) {
-      return response.send(404).send({ error: 'None quote found' });
-    }
+    try{
+      const quote = await connection('quotes')
+        .where('user_id', user_id)
+        .join('users', 'users.id', '=', 'quotes.user_id')
+        .select('quotes.*', 'users.username');
+      
+      if(!quote) {
+        return response.send(404).send({ error: 'None quote found' });
+      }
 
-    return response.json(quote);
+      return response.json(quote);
+    } catch(err) { return response.status(400).send({ error: 'Erro ao listar frases'} )}
   }
 
   async create(request: Request, response: Response) {
