@@ -26,8 +26,7 @@ class QuotesController {
   }
 
   async create(request: Request, response: Response) {
-    const { content, author, complement  } = request.body;
-    const user_id = request.headers.authorization;
+    const { content, author, complement, user_id} = request.body;
     
     try{
       const quote = await connection('quotes').insert({
@@ -46,21 +45,27 @@ class QuotesController {
   async show(request: Request, response: Response) {
     const { id } = request.params;
     const user_id = Number(request.headers.authorization);
-    const trx = await connection.transaction();
 
-    const quote = await trx('quotes').where('id', id).where('user_id', user_id).first();
+    try{
+      const quote = await connection('quotes')
+      .where('id', id)
+      .where('user_id', user_id)
+      .first();
 
-    if(!quote) {
-      return response.status(404).send({ error: 'Quote not found' });
+      if(!quote) {
+        return response.status(404).send({ error: 'Quote not found' });
+      }
+
+      return response.json({ quote });
+    } catch(err) {
+      console.log(err);
+      response.status(400).json({ error: 'Was not possible to show this quote'});
     }
-
-    return response.json({ quote });
   }
 
   async update(request: Request, response: Response) {
     const { id } = request.params;
-    const user_id = Number(request.headers.authorization);
-    const { content, author, complement } = request.body;
+    const { content, author, complement, user_id } = request.body;
 
     const quote: Quote = await connection('quotes').where('id', id).first();
 
@@ -69,7 +74,7 @@ class QuotesController {
     }
     
     try{
-      await connection('quotes').where('id', id)
+      const updatedQuote = await connection('quotes').where('id', id)
       .update({
         content,
         author,
@@ -77,8 +82,9 @@ class QuotesController {
       })
       .select('*');
 
-        return response.send({ content, author, complement });
+        return response.json(updatedQuote);
     } catch(err) {
+      console.log(err);
       return response.status(400).send({ error: 'Error updating quote' });
     }
   }
