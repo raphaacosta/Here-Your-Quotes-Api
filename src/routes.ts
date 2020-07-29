@@ -4,13 +4,13 @@ import { celebrate, Joi } from 'celebrate';
 import UsersController from './controllers/usersController';
 import QuotesController from './controllers/quotesController';
 import SessionController from './controllers/sessionController';
-import ProfileController from './controllers/profileController'
+import SearchController from './controllers/searchController';
 
 const routes = express.Router();
 
 const usersController = new UsersController;
 const quotesController = new QuotesController;
-const profileController = new ProfileController;
+const profileController = new SearchController;
 const sessionController = new SessionController;
 
 routes.post('/sessions', celebrate({
@@ -19,11 +19,7 @@ routes.post('/sessions', celebrate({
   })
 }),sessionController.create);
 
-routes.get('/profile', celebrate({
-  headers: Joi.object().keys({
-    authorization: Joi.number().required(),
-  })
-}),profileController.index);
+// routes.put('/search/:id',profileController.index);
 
 routes.post('/users_create', celebrate({
   body: Joi.object().keys({
@@ -38,6 +34,7 @@ routes.get('/quotes', quotesController.index);
 routes.get('/quotes/:id', quotesController.show);
 routes.post('/quotes', celebrate({
   body: Joi.object().keys({
+    user_id: Joi.number(),
     content: Joi.string().required(),
     author: Joi.string(),
     complement: Joi.string(),
@@ -48,6 +45,7 @@ routes.delete('/quotes/:id' ,quotesController.destroy);
 
 routes.put('/quotes/:id', celebrate({
   body: Joi.object().keys({
+    user_id: Joi.number(),
     content: Joi.string(),
     author: Joi.string(),
     complement: Joi.string(),
