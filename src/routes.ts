@@ -4,18 +4,22 @@ import { celebrate, Joi } from 'celebrate';
 import UsersController from './controllers/usersController';
 import QuotesController from './controllers/quotesController';
 import SessionController from './controllers/sessionController';
+import SearchController from './controllers/searchController';
 
 const routes = express.Router();
 
 const usersController = new UsersController;
 const quotesController = new QuotesController;
 const sessionController = new SessionController;
+const searchController = new SearchController;
 
 routes.post('/sessions', celebrate({
   body: Joi.object().keys({
     id: Joi.number().required(),
   })
 }),sessionController.create);
+
+routes.get('/search?', searchController.index);
 
 routes.post('/users_create', celebrate({
   body: Joi.object().keys({
