@@ -34,18 +34,18 @@
 ```bash
   $ git clone https://github.com/raphaacosta/Here-Your-Quotes-Api.git
 ```
-  Go to the directory and run:
+  To install all dependencies, run:
 ```bash
   $ yarn install
   or
   $ npm install
 ```
 
-  To install all dependencies, then run:
+  To initiate the database run:
 ```bash
-  $ npx knex migrate:latest --knexfile knexfile.ts migrate:latest
+  $ yarn knex:migrate
 ```
-  to run the migrations to the databasse, then run: `$ yarn dev` or `$ npm dev` to run the API.
+  to run the migrations to the databasse, then run: `$ yarn dev` or `$ npm dev` to run the developer version.
 
   ## 👍 Contribute
 

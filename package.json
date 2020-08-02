@@ -5,6 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "babel src --extensions \".js,.ts\" --out-dir dist --copy-files --no-copy-ignored",
+    "knex:migrate": "knex migrate:latest --knexfile knexfile.ts migrate:latest",
     "start": "node dist/server.js",
     "dev": "ts-node-dev -r tsconfig-paths/register --respawn --transpileOnly --ignore-watch node_modules --no-notify src/server.ts"
   },
@@ -34,6 +35,7 @@
     "express": "^4.17.1",
     "knex": "^0.21.1",
     "lodash": "^4.17.19",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "sqlite3": "^5.0.0"
   }
 }
